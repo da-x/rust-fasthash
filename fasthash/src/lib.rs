@@ -36,27 +36,10 @@
 //! ```
 //!
 //! Or use `RandomState<CityHash64>` with a random seed.
-//!
-//! ```rust
-//! use std::collections::HashMap;
-//!
-//! use fasthash::{city, RandomState};
-//!
-//! let s = RandomState::<city::Hash64>::new();
-//! let mut map = HashMap::with_hasher(s);
-//!
-//! assert_eq!(map.insert(37, "a"), None);
-//! assert_eq!(map.is_empty(), false);
-//!
-//! map.insert(37, "b");
-//! assert_eq!(map.insert(37, "c"), Some("b"));
-//! assert_eq!(map[&37], "c");
-//! ```
 #![warn(missing_docs)]
 
 #[macro_use]
 extern crate cfg_if;
-#[macro_use]
 extern crate lazy_static;
 extern crate fasthash_sys as ffi;
 
@@ -70,7 +53,6 @@ cfg_if! {
 
 #[macro_use]
 mod hasher;
-pub mod city;
 pub mod farm;
 pub mod highway;
 pub mod lookup3;
@@ -81,7 +63,6 @@ pub mod murmur2;
 pub mod murmur3;
 pub mod sea;
 pub mod spooky;
-pub mod t1ha;
 pub mod xx;
 pub mod xxh3;
 
@@ -97,8 +78,6 @@ pub use crate::murmur3::Hasher32 as Murmur3Hasher;
 #[doc(no_inline)]
 pub use crate::sea::Hasher64 as SeaHasher;
 pub use crate::spooky::{Hasher128 as SpookyHasherExt, Hasher64 as SpookyHasher};
-pub use crate::t1ha::{t1ha0, t1ha1, t1ha2};
-pub use crate::t1ha2::{Hasher128 as T1haHasherExt, Hasher128 as T1haHasher};
 pub use crate::xx::Hasher64 as XXHasher;
 cfg_if! {
     if #[cfg(target_pointer_width = "64")] {
@@ -111,10 +90,8 @@ cfg_if! {
 }
 cfg_if! {
     if #[cfg(any(feature = "sse42", target_feature = "sse4.2"))] {
-        pub use crate::city::{Hasher64 as CityHasher, crc::Hasher128 as CityHasherExt};
         pub use crate::metro::{crc::Hasher128_1 as MetroHasherExt, crc::Hasher64_1 as MetroHasher};
     } else {
-        pub use city::{Hasher128 as CityHasherExt, Hasher64 as CityHasher};
         pub use metro::{Hasher128_1 as MetroHasherExt, Hasher64_1 as MetroHasher};
     }
 }

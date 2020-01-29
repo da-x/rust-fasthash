@@ -145,14 +145,6 @@ pub trait HasherExt: Hasher {
 /// > iteration order allows a form of DOS attack. To counter that we
 /// > increment one of the seeds on every `RandomState` creation, giving
 /// > every corresponding `HashMap` a different iteration order.
-///
-/// # Examples
-///
-/// ```rust
-/// use fasthash::{Seed, city};
-///
-/// city::hash128_with_seed(b"hello world", Seed::gen().into());
-/// ```
 #[derive(Clone, Copy, Debug)]
 pub struct Seed(Xoroshiro128Rng);
 
@@ -211,23 +203,6 @@ impl From<Seed> for u128 {
 /// A particular instance `RandomState` will create the same instances of
 /// [`Hasher`], but the hashers created by two different `RandomState`
 /// instances are unlikely to produce the same result for the same values.
-///
-/// ```rust
-/// use std::collections::HashMap;
-///
-/// use fasthash::RandomState;
-/// use fasthash::city::Hash64;
-///
-/// let s = RandomState::<Hash64>::new();
-/// let mut map = HashMap::with_hasher(s);
-///
-/// assert_eq!(map.insert(37, "a"), None);
-/// assert_eq!(map.is_empty(), false);
-///
-/// map.insert(37, "b");
-/// assert_eq!(map.insert(37, "c"), Some("b"));
-/// assert_eq!(map[&37], "c");
-/// ```
 #[derive(Clone)]
 pub struct RandomState<T: FastHash> {
     seed: Seed,
@@ -534,9 +509,6 @@ mod tests {
 
     #[test]
     fn test_hashmap_with_hashers() {
-        test_hashmap_with_hashers![city::Hash32, city::Hash64, city::Hash128];
-        #[cfg(any(feature = "sse42", target_feature = "sse4.2"))]
-        test_hashmap_with_hashers![city::crc::Hash128];
         test_hashmap_with_hashers![farm::Hash32, farm::Hash64, farm::Hash128];
         test_hashmap_with_hashers![lookup3::Hash32];
         test_hashmap_with_hashers![
@@ -566,13 +538,6 @@ mod tests {
         test_hashmap_with_hashers![murmur3::Hash32, murmur3::Hash128_x86, murmur3::Hash128_x64];
         test_hashmap_with_hashers![sea::Hash64];
         test_hashmap_with_hashers![spooky::Hash32, spooky::Hash64, spooky::Hash128];
-        test_hashmap_with_hashers![
-            t1ha0::Hash64,
-            t1ha1::Hash64Le,
-            t1ha1::Hash64Be,
-            t1ha2::Hash64AtOnce,
-            t1ha2::Hash128AtOnce
-        ];
 
         test_hashmap_with_hashers![xx::Hash32, xx::Hash64];
     }

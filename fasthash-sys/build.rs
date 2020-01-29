@@ -126,7 +126,6 @@ fn build_fasthash() {
         .flag("-Wno-unknown-attributes")
         .include("src/highwayhash")
         .file("src/fasthash.cpp")
-        .file("src/smhasher/City.cpp")
         .file("src/smhasher/farmhash-c.c")
         .file("src/smhasher/lookup3.cpp")
         .file("src/smhasher/mum.cc")

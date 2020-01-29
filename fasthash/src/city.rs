@@ -101,25 +101,6 @@
 //! perform as expected on some compilers.  For example, preliminary reports
 //! suggest that some Microsoft compilers compile `CityHash` to assembly that's
 //! 10-20% slower than it could be.
-//!
-//! # Example
-//!
-//! ```
-//! use std::hash::{Hash, Hasher};
-//!
-//! use fasthash::{city, CityHasher};
-//!
-//! fn hash<T: Hash>(t: &T) -> u64 {
-//!     let mut s: CityHasher = Default::default();
-//!     t.hash(&mut s);
-//!     s.finish()
-//! }
-//!
-//! let h = city::hash64(b"hello world\xff");
-//!
-//! assert_eq!(h, hash(&"hello world"));
-//! ```
-//!
 use std::mem;
 
 use crate::ffi;
