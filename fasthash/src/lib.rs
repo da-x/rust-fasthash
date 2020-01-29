@@ -70,7 +70,6 @@ cfg_if! {
 
 #[macro_use]
 mod hasher;
-pub mod city;
 pub mod farm;
 pub mod highway;
 pub mod lookup3;
@@ -111,10 +110,8 @@ cfg_if! {
 }
 cfg_if! {
     if #[cfg(any(feature = "sse42", target_feature = "sse4.2"))] {
-        pub use crate::city::{Hasher64 as CityHasher, crc::Hasher128 as CityHasherExt};
         pub use crate::metro::{crc::Hasher128_1 as MetroHasherExt, crc::Hasher64_1 as MetroHasher};
     } else {
-        pub use city::{Hasher128 as CityHasherExt, Hasher64 as CityHasher};
         pub use metro::{Hasher128_1 as MetroHasherExt, Hasher64_1 as MetroHasher};
     }
 }

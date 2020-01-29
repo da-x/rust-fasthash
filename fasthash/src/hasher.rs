@@ -534,9 +534,6 @@ mod tests {
 
     #[test]
     fn test_hashmap_with_hashers() {
-        test_hashmap_with_hashers![city::Hash32, city::Hash64, city::Hash128];
-        #[cfg(any(feature = "sse42", target_feature = "sse4.2"))]
-        test_hashmap_with_hashers![city::crc::Hash128];
         test_hashmap_with_hashers![farm::Hash32, farm::Hash64, farm::Hash128];
         test_hashmap_with_hashers![lookup3::Hash32];
         test_hashmap_with_hashers![
