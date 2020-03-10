@@ -137,6 +137,10 @@ fn build_fasthash() {
         .file("src/smhasher/Spooky.cpp")
         .file("src/xxHash/xxhash.c");
 
+    if cfg!(any(target_endian = "little")) {
+        build.define("LITTLE_ENDIAN", "1");
+    }
+
     if support_sse42() {
         build
             .flag("-msse4.2")
